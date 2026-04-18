@@ -36,20 +36,20 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _logoController, curve: Curves.elasticOut),
     );
 
-    _logoOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _logoController, curve: Curves.easeIn),
-    );
+    _logoOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _logoController, curve: Curves.easeIn));
 
-    _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _textController, curve: Curves.easeIn),
-    );
+    _textOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeIn));
 
     _textSlide = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _textController, curve: Curves.easeOut),
-    );
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeOut));
 
     _logoController.forward().then((_) {
       _textController.forward();
@@ -136,7 +136,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Column(
                     children: [
                       Text(
-                        'VoxAI',
+                        'Nova Voice',
                         style: GoogleFonts.inter(
                           fontSize: 42,
                           fontWeight: FontWeight.w800,

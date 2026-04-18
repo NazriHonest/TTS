@@ -27,7 +27,8 @@ class AudioModel {
       voice: json['voice'] as String,
       language: json['language'] ?? 'en-US',
       speed: (json['speed'] as num?)?.toDouble() ?? 1.0,
-      createdAt: DateTime.tryParse(json['created_at'] as String) ?? DateTime.now(),
+      createdAt:
+          DateTime.tryParse(json['created_at'] as String) ?? DateTime.now(),
       isFavorite: json['is_favorite'] as bool? ?? false,
     );
   }
@@ -70,12 +71,10 @@ class AudioModel {
   /// Get voice display name from voice ID
   String get voiceDisplayName {
     const voiceNames = {
-      'female_1': 'Sarah',
-      'male_1': 'James',
-      'female_2': 'Emma',
-      'male_2': 'Carlos',
-      'female_3': 'Yuki',
-      'male_3': 'Hans',
+      'female_1': 'Ubah',
+      'male_1': 'Musse',
+      'female_2': 'Nasra',
+      'male_2': 'Nasri',
     };
     return voiceNames[voice] ?? voice;
   }

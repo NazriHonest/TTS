@@ -1,24 +1,22 @@
 class AppConstants {
-  static const String appName = 'VoxAI';
+  static const String appName = 'Nova Voice';
   static const String appTagline = 'Transform text into lifelike speech';
-  static const String apiBaseUrl = 'http://10.0.2.2:8000/api'; // Android emulator localhost
+  static const String apiBaseUrl =
+      'http://10.0.2.2:8000/api'; // Android emulator localhost
 
   static const List<VoiceOption> voices = [
-    VoiceOption(id: 'female_1', name: 'Sarah', gender: 'Female', accent: 'US'),
-    VoiceOption(id: 'male_1', name: 'James', gender: 'Male', accent: 'US'),
-    VoiceOption(id: 'female_2', name: 'Emma', gender: 'Female', accent: 'UK'),
-    VoiceOption(id: 'male_2', name: 'Carlos', gender: 'Male', accent: 'ES'),
-    VoiceOption(id: 'female_3', name: 'Yuki', gender: 'Female', accent: 'JP'),
-    VoiceOption(id: 'male_3', name: 'Hans', gender: 'Male', accent: 'DE'),
+    VoiceOption(id: 'female_1', name: 'Ubah', gender: 'Female', accent: 'SO'),
+    VoiceOption(id: 'male_1', name: 'Musse', gender: 'Male', accent: 'US'),
+    VoiceOption(id: 'female_2', name: 'Nasra', gender: 'Female', accent: 'UK'),
+    VoiceOption(id: 'male_2', name: 'Nasri', gender: 'Male', accent: 'ES'),
   ];
 
   static const List<LanguageOption> languages = [
+    LanguageOption(code: 'so-SO', name: 'Somali'),
+    LanguageOption(code: 'ar-SA', name: 'Arabic'),
+    LanguageOption(code: 'sw-KE', name: 'Swahili'),
     LanguageOption(code: 'en-US', name: 'English (US)'),
     LanguageOption(code: 'en-GB', name: 'English (UK)'),
-    LanguageOption(code: 'es-ES', name: 'Spanish'),
-    LanguageOption(code: 'fr-FR', name: 'French'),
-    LanguageOption(code: 'de-DE', name: 'German'),
-    LanguageOption(code: 'ja-JP', name: 'Japanese'),
   ];
 
   static const String sampleAudioUrl =
@@ -45,8 +43,5 @@ class LanguageOption {
   final String code;
   final String name;
 
-  const LanguageOption({
-    required this.code,
-    required this.name,
-  });
+  const LanguageOption({required this.code, required this.name});
 }

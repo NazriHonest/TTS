@@ -41,10 +41,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     final speed = ref.watch(selectedSpeedProvider);
     final generationState = ref.watch(ttsGenerationProvider);
 
-    // Navigate to player when generation succeeds
+    // Handle generation success
     ref.listen<TTSGenerationState>(ttsGenerationProvider, (prev, next) {
       if (next.status == TTSGenerationStatus.success && next.result != null) {
-        context.push('/player/${next.result!.id}');
+        final generatedAudioId = next.result!.id;
+        
+        // Show options bottom sheet instead of immediate navigation
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: colorScheme.surface,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          builder: (context) => _buildPostGenerationOptions(context, generatedAudioId),
+        );
         ref.read(ttsGenerationProvider.notifier).reset();
       }
     });
@@ -70,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
             const SizedBox(width: 10),
             Text(
-              'VoxAI',
+              'Nova Voice',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: 22,
@@ -106,7 +116,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                color: colorScheme.surfaceContainerHighest.withValues(
+                  alpha: 0.3,
+                ),
                 border: Border.all(
                   color: colorScheme.primary.withValues(alpha: 0.1),
                 ),
@@ -259,7 +271,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   );
                 },
                 child: ElevatedButton.icon(
-                  onPressed: (generationState.status ==
+                  onPressed:
+                      (generationState.status ==
                               TTSGenerationStatus.generating ||
                           _textController.text.trim().isEmpty)
                       ? null
@@ -327,10 +340,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         const SizedBox(width: 8),
         Text(
           title,
-          style: GoogleFonts.inter(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -347,16 +357,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-        border: Border.all(
-          color: colorScheme.primary.withValues(alpha: 0.08),
-        ),
+        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.08)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 16, color: colorScheme.primary.withValues(alpha: 0.7)),
+              Icon(
+                icon,
+                size: 16,
+                color: colorScheme.primary.withValues(alpha: 0.7),
+              ),
               const SizedBox(width: 6),
               Text(
                 label,
@@ -371,6 +383,89 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           const SizedBox(height: 4),
           child,
         ],
+      ),
+    );
+  }
+
+  Widget _buildPostGenerationOptions(BuildContext context, String audioId) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: colorScheme.onSurface.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'Speech Generated Successfully!',
+              style: GoogleFonts.inter(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 24),
+            ListTile(
+              onTap: () {
+                Navigator.pop(context);
+                context.push('/player/$audioId');
+              },
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.play_arrow_rounded, color: colorScheme.primary),
+              ),
+              title: Text(
+                'Preview / Listen to Audio',
+                style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(
+                'Open player to hear the result',
+                style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            ListTile(
+              onTap: () {
+                Navigator.pop(context);
+                // Simulate download for now
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Audio downloaded to device successfully!'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
+              leading: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: colorScheme.secondary.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.download_rounded, color: colorScheme.secondary),
+              ),
+              title: Text(
+                'Download Audio',
+                style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              ),
+              subtitle: Text(
+                'Save to your device storage',
+                style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.6)),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
       ),
     );
   }
